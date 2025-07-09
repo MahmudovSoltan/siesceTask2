@@ -1,9 +1,9 @@
 .left_container {
-  width: 512px;
+  width: max-content;
   padding-top: 100px;
 }
 .right_container {
-  width: 616px;
+  width: 35%;
 }
 
 .titile {
@@ -22,6 +22,7 @@
   color: var(--color-dark);
   margin-bottom: 48px;
   opacity: 75%;
+  line-height: 1.25rem;
 }
 .form {
   margin-top: var(--margin);
@@ -79,7 +80,7 @@
   cursor: pointer;
 }
 .password_image {
-  width: 50%;
+  width: 35%;
   height: 90vh;
 }
 .image {

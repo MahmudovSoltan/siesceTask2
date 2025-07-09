@@ -6,5 +6,6 @@
 .signin_content {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 105px;
 }

@@ -1,7 +1,6 @@
 import Logo from "../../components/logo"
 import SignInLeft from "../../components/signin/SignInleft"
 import SignInRight from "../../components/signin/SignInRight"
-
 import styles from './css/signin.module.css'
 const SignUp = () => {
     return (

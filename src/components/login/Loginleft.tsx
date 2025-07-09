@@ -6,6 +6,7 @@ const Loginleft = () => {
         <div className={` ${styles.left_container}`}>
             <h2 className={styles.titile}>
                 Login
+
             </h2>
             <p className={styles.phargraf}>
                 Login to access your travelwise  account

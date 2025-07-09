@@ -1,9 +1,9 @@
 .left_container {
-  width: 486px;
+  width: 35%;
   height: 100%;
 }
 .right_container {
-  width: 640px;
+  width: 40%;
 }
 
 .titile {
@@ -20,6 +20,8 @@
   font-size: var(--text-size);
   line-height: 100%;
   color: var(--color-dark);
+  opacity: 75%;
+  line-height: 1.25rem;
 }
 .form {
   margin-top: var(--margin);
