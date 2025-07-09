@@ -1,0 +1,10 @@
+.login_top {
+  display: flex;
+  align-items: center;
+}
+.login_content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 104px;
+}

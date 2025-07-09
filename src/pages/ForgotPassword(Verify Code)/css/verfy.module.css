@@ -1,0 +1,9 @@
+.verfy_top {
+  display: flex;
+  align-items: center;
+}
+.verfy_content {
+  display: flex;
+  justify-content: center;
+  gap: 104px;
+}

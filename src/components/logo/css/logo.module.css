@@ -1,0 +1,17 @@
+.logo_container {
+  padding-top: 20px;
+  padding-left: 62px;
+  padding-right: 62px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.logo_title {
+  font-family: var(--red-hat);
+  font-weight: 700;
+  font-size: 28px;
+  /* line-height: 150%; */
+}
+.logo_container img{
+  width: 24px;
+}

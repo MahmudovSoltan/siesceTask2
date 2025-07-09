@@ -1,0 +1,10 @@
+.signin_top {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.signin_content {
+  display: flex;
+  align-items: center;
+  gap: 105px;
+}
