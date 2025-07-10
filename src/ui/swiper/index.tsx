@@ -3,6 +3,7 @@ import './css/swiper.css'
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+
 import image1 from '../../assets/images/Rectangle 20.svg'
 import image2 from '../../assets/images/Rectangle.svg'
 import image3 from '../../assets/images/Group 4.svg'

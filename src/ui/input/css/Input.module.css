@@ -14,7 +14,9 @@
   outline: none;
   color: var(--color-black);
 }
-
+.inputField:focus {
+  border: 1px solid var(--color-primary);
+}
 .inputField:focus + .floatingLabel,
 .inputField:not(:placeholder-shown) + .floatingLabel {
   top: 0px;
@@ -25,7 +27,7 @@
   font-weight: 400;
   font-size: var(--label-size);
   line-height: 100%;
-  color: var(--color-black);
+  color: var(--color-primary);
   /* font-size: 10px; */
 }
 
@@ -52,4 +54,20 @@
   border: none;
   cursor: pointer;
   font-size: 18px;
+}
+
+.inputError {
+  border: 1px solid red;
+}
+
+
+
+.errorAbsolute {
+  position: absolute;
+  bottom: -18px; /* məsafəni düzəldə bilərsən */
+  left: 0;
+  color: red;
+  font-size: 12px;
+  pointer-events: none;
+  min-width: min-content;
 }

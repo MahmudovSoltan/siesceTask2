@@ -5,6 +5,7 @@ import styles from './css/signincomp.module.css'
 import BUtton from '../../ui/button'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE } from '../../constants'
+import { registerFunc } from '../../services/auth'
 interface InitialDataType {
     email: string,
     password: string,
@@ -22,15 +23,31 @@ const initialData: InitialDataType = {
     confirmPassword: "",
 }
 const SignInForm = () => {
+    const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
     const [formData, setFormData] = useState<InitialDataType>(initialData)
+    const [error, setError] = useState<unknown>('')
     const navigate = useNavigate()
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setFormData({
             ...formData,
             [name]: value
         })
     }
+    console.log(error);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            await registerFunc(formData, setFormErrors);
+            navigate(ROUTE.LOGIN);
+            setFormData(initialData)
+        } catch (error) {
+            setError(error)
+            console.error(error);
+        }
+    };
     return (
         <form className={styles.form}>
             <div className={styles.form_inputs}>
@@ -40,6 +57,7 @@ const SignInForm = () => {
                     value={formData.firstName}
                     onChange={handleChange}
                     witdh='308px'
+                    error={formErrors}
                 />
                 <TextInput
                     label="Last Name"
@@ -47,6 +65,7 @@ const SignInForm = () => {
                     value={formData.lastName}
                     onChange={handleChange}
                     witdh='308px'
+                    error={formErrors}
                 />
             </div>
             <div className={styles.form_inputs}>
@@ -56,6 +75,7 @@ const SignInForm = () => {
                     value={formData.email}
                     onChange={handleChange}
                     witdh='308px'
+                    error={formErrors}
                 />
                 <TextInput
                     label="Phone Number"
@@ -63,6 +83,7 @@ const SignInForm = () => {
                     value={formData.phoneNumber}
                     onChange={handleChange}
                     witdh='308px'
+                    error={formErrors}
                 />
             </div>
 
@@ -71,6 +92,7 @@ const SignInForm = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
+                error={formErrors}
             />
 
             <PasswordInput
@@ -78,6 +100,7 @@ const SignInForm = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
+                error={formErrors}
             />
 
             <div className={styles.form_accept}>
@@ -88,8 +111,9 @@ const SignInForm = () => {
                     I agree to all the <span>Terms</span> and <span>Privacy Policies</span>
                 </p>
             </div>
+
             <div className={styles.form_btn}>
-                <BUtton onclick={() => { }} titile='Create account' />
+                <BUtton onclick={handleSubmit} titile='Create account' />
             </div>
 
             <div className={styles.form_bottom_text}>

@@ -1,10 +1,14 @@
+import { ToastContainer } from "react-toastify"
 import MainRoutes from "./routes/MainRoutes"
+import { AuthProvider } from "./contexts/AuthProvider"
+
 
 const App = () => {
   return (
-    <div>
+    <AuthProvider>
       <MainRoutes />
-    </div>
+      <ToastContainer />
+    </AuthProvider>
   )
 }
 

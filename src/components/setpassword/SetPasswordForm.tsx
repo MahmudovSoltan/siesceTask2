@@ -1,30 +1,59 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import BUtton from '../../ui/button'
 import PasswordInput from '../../ui/input/Input-Icon'
 import styles from './css/setPasswordComp.module.css'
-interface InitialDataType {
-    createpassword: string,
-    reEnterPassword: string,
-}
-const initialData: InitialDataType = {
-    createpassword: "",
-    reEnterPassword: "",
+
+import { resetPassword } from '../../services/auth'
+import { toast } from 'react-toastify'
+import { getCookie } from '../../utils/cookie'
+import type { IResedPassword } from '../../types/auth.type'
+
+const initialData: IResedPassword = {
+  email: "",
+  newPassword: "",
+  confirmNewPassword: "",
 }
 const SetPasswordForm = () => {
-   const [formData, setFormData] = useState<InitialDataType>(initialData)
-    const handleChange = (e) => {
-        const { name, value } = e.target
-        setFormData({
-            ...formData,
-            [name]: value
-        })
+     const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
+  const [formData, setFormData] = useState<IResedPassword>(initialData)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData({
+      ...formData,
+      [name]: value
+    })
+  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    try {
+      await resetPassword(formData,setFormErrors)
+      toast.success("ugurla yenilendi")
+    } catch (error) {
+      console.log(error);
+      toast.error("xeta oldu!")
     }
+
+    
+  }
+
+  useEffect(() => {
+    const storedEmail = getCookie('user_email');
+    if (storedEmail) {
+      setFormData((prev) => ({
+        ...prev,
+        email: storedEmail,
+      }));
+    }
+
+  }, []);
+
+
   return (
     <form className={styles.form}>
-      <PasswordInput label='Create Password' name='createpassword' onChange={handleChange} value={formData.createpassword} />
-      <PasswordInput label='Re-enter Password' name='reEnterPassword' onChange={handleChange} value={formData.reEnterPassword} />
+      <PasswordInput error={formErrors} label='Create Password' name='newPassword' onChange={handleChange} value={formData.newPassword} />
+      <PasswordInput error={formErrors} label='Re-enter Password' name='confirmNewPassword' onChange={handleChange} value={formData.confirmNewPassword} />
       <div className={styles.form_btn}>
-        <BUtton onclick={() => { }} titile='Verify' />
+        <BUtton onclick={handleSubmit} titile='Verify' />
       </div>
     </form>
   )

@@ -8,7 +8,8 @@ interface TextInputProps {
     name: string;
     type?: string;
     placeholder?: string;
-    witdh: string
+    witdh: string,
+    error: any;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -19,19 +20,27 @@ const TextInput: React.FC<TextInputProps> = ({
     type = "text",
     placeholder = "",
     witdh,
+    error
 }) => {
+    const inputName = name.toLowerCase()
     return (
-        <div className={styles.inputWrapper} style={{ width: witdh }}>
-            <input
-                type={type}
-                name={name}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-                className={styles.inputField}
-            />
-            <label className={styles.floatingLabel}>{label}</label>
-        </div>
+        <>
+            <div className={styles.inputWrapper} style={{ width: witdh }}>
+                <input
+                    type={type}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    placeholder={placeholder}
+                    className={`${styles.inputField} ${error?.[inputName] ? styles.inputError : ""}`}
+                />
+                <label className={styles.floatingLabel}>{label}</label>
+                {error?.[inputName] && (
+                    <div className={styles.errorAbsolute}>{error[inputName]?.slice(0,44)}</div>
+                )}
+            </div>
+
+        </>
     );
 };
 

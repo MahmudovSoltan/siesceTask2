@@ -1,7 +1,7 @@
 import styles from './css/buton.module.css'
 
 interface PropsType {
-    onclick: () => void,
+    onclick: (e: React.FormEvent) => void,
     titile: string
 }
 const BUtton = ({ onclick, titile }: PropsType) => {

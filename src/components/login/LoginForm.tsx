@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import BUtton from '../../ui/button'
 import styles from './css/logincomp.module.css'
 import PasswordInput from '../../ui/input/Input-Icon'
 import TextInput from '../../ui/input/Input'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE } from '../../constants'
+import { loginFunc } from '../../services/auth'
+import { AuthContext } from '../../contexts/AuthContext'
 
 interface InitialDataType {
     email: string,
@@ -14,24 +16,46 @@ const initialData: InitialDataType = {
     email: "",
     password: "",
 }
+
 const LoginForm = () => {
+    const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
     const [formData, setFormData] = useState<InitialDataType>(initialData)
+    const authContext = useContext(AuthContext)
     const navigate = useNavigate()
-    const handleChange = (e) => {
+
+    if (!authContext) {
+      throw new Error("AuthContext Provider is missing")
+    }
+
+    const { login } = authContext
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setFormData({
             ...formData,
             [name]: value
         })
     }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        const response = await loginFunc(formData, setFormErrors)
+    
+        console.log(response,"response");
+        
+        login(response)
+        setFormData(initialData)
+    }
+
     return (
-        <form className={styles.form}>
+        <form className={styles.form} >
             <TextInput
                 label="Email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 witdh='100%'
+                error={formErrors}
             />
 
             <PasswordInput
@@ -39,8 +63,8 @@ const LoginForm = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
+                error={formErrors}
             />
-
 
             <div className={styles.check_box}>
                 <div className={styles.form_accept}>
@@ -55,14 +79,14 @@ const LoginForm = () => {
                     Forgot Password
                 </div>
             </div>
+
             <div className={styles.form_btn}>
-                <BUtton onclick={() => { }} titile='Login' />
+                <BUtton titile='Login' onclick={handleSubmit} />
             </div>
 
             <div className={styles.form_bottom_text}>
                 <p className={styles.form_text}>
                     Don’t have an account? <span onClick={() => navigate(ROUTE.REGISTER)}> Sign up</span>
-
                 </p>
             </div>
         </form>
