@@ -4,7 +4,6 @@ import PasswordInput from '../../ui/input/Input-Icon'
 import styles from './css/setPasswordComp.module.css'
 
 import { resetPassword } from '../../services/auth'
-import { toast } from 'react-toastify'
 import { getCookie } from '../../utils/cookie'
 import type { IResedPassword } from '../../types/auth.type'
 

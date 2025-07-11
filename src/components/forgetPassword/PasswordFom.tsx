@@ -4,7 +4,6 @@ import { useState } from "react"
 import TextInput from "../../ui/input/Input"
 import styles from './css/passwordcomp.module.css'
 import { sendEmilFunc } from "../../services/auth"
-import { toast } from "react-toastify"
 import { ROUTE } from "../../constants"
 import { useNavigate } from "react-router-dom"
 import { setCookie } from "../../utils/cookie"
