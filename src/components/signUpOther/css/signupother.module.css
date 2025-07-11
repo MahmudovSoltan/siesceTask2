@@ -1,9 +1,9 @@
 .signup_other {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  gap: var(--g-base);
+  margin-top: var(--m-100);
+  margin-bottom: var(--m-100);
 }
 .signup_other span {
   width: 100%;
@@ -20,8 +20,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  margin-bottom: 30px;
+  gap: var(--g-base);
+  margin-bottom: var(--m-100);
 }
 .other_card {
   width: 150px;
@@ -30,6 +30,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: var(--r-50);
   cursor: pointer;
 }

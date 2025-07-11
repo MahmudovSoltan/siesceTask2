@@ -7,10 +7,10 @@
 }
 
 .titile {
-  margin-bottom: 16px;
+  margin-bottom: var(--m-50);
   font-family: var(--popins);
   font-weight: 600;
-  font-size: 36px;
+  font-size: var(--title-size);
   line-height: 100%;
   letter-spacing: 0%;
 }
@@ -34,7 +34,7 @@
 .form_accept {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--g-50);
 }
 .form_accept input {
   display: flex;

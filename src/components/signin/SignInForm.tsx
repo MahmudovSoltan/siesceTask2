@@ -6,6 +6,7 @@ import BUtton from '../../ui/button'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE } from '../../constants'
 import { registerFunc } from '../../services/auth'
+import { toast } from 'react-toastify'
 interface InitialDataType {
     email: string,
     password: string,
@@ -25,7 +26,6 @@ const initialData: InitialDataType = {
 const SignInForm = () => {
     const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
     const [formData, setFormData] = useState<InitialDataType>(initialData)
-    const [error, setError] = useState<unknown>('')
     const navigate = useNavigate()
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -34,18 +34,20 @@ const SignInForm = () => {
             [name]: value
         })
     }
-    console.log(error);
 
+  console.log(formErrors,'FormError');
+  
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         try {
             await registerFunc(formData, setFormErrors);
             navigate(ROUTE.LOGIN);
             setFormData(initialData)
         } catch (error) {
-            setError(error)
             console.error(error);
+        }
+        if (formErrors.general) {
+            toast.error("User artıq mövcuddur")
         }
     };
     return (

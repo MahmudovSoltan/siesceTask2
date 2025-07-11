@@ -31,10 +31,8 @@ const PasswordFom = () => {
             setCookie('user_email', user_email)
             await sendEmilFunc(formData, setFormErrors)
             navigate(ROUTE.VERFY_CODE)
-            toast.success("Ugurlu oldu")
         } catch (error) {
             console.log(error);
-            toast.error("Xəta baş verdi")
         }
 
     }

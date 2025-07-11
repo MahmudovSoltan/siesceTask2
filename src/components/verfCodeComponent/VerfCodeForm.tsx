@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import BUtton from "../../ui/button";
 import PasswordInput from "../../ui/input/Input-Icon";
 import styles from "./css/verfyComp.module.css";
-import { vefCodeFUnc } from "../../services/auth";
+import { sendEmilFunc, vefCodeFUnc } from "../../services/auth";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "../../utils/cookie";
 import { ROUTE } from "../../constants";
+import { toast } from "react-toastify";
 
 interface InitialDataType {
   email: string;
@@ -43,15 +44,33 @@ const VerfCodeForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await vefCodeFUnc(formData,setFormErrors)
+      const response = await vefCodeFUnc(formData, setFormErrors)
       console.log(response);
       navigate(ROUTE.SETPASSWOD)
     } catch (error) {
       console.log(error);
     }
-  
-    
+    setFormData(initialData)
+    if (formErrors.general) {
+      toast.error(formErrors.general)
+    }
+
   };
+  const resendCode = async () => {
+
+    try {
+      const user_email = getCookie('user_email')
+      if (user_email) {
+        await sendEmilFunc({ email: user_email }, setFormErrors)
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
+  console.log(formErrors, "formErrors");
 
   return (
     <div>
@@ -64,7 +83,7 @@ const VerfCodeForm = () => {
           error={formErrors}
         />
         <p className={styles.form_text}>
-          Didn’t receive a code? <span>Resend</span>
+          Didn’t receive a code? <span onClick={resendCode}>Resend</span>
         </p>
         <div className={styles.form_btn}>
           <BUtton titile="Verify" onclick={handleSubmit} />

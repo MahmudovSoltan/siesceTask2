@@ -4,19 +4,39 @@ export const handleApiError = (
   error: any,
   setFormErrors?: (val: ParsedFormErrors) => void
 ) => {
-  if (
-    error?.response?.data &&
-    typeof error.response.data === "object" &&
-    setFormErrors
-  ) {
-    const validationErrors = error.response.data as ApiValidationErrors;
+  const responseData = error?.response?.data;
 
-    const parsedErrors: ParsedFormErrors = {};
+  if (!responseData || typeof responseData !== "object") {
+    console.error("Bilinməyən xəta:", error);
+    return;
+  }
+
+  console.log(error, 'funcError');
+
+  const parsedErrors: ParsedFormErrors = {};
+
+  // 1. Əgər 409 statuslu ümumi error varsa (məsələn: "User artıq mövcuddur")
+  if (responseData.statusCode === 409 || responseData.statusCode === 401 && typeof responseData.error === "string") {
+    parsedErrors.general = responseData.error;
+    if (setFormErrors) setFormErrors(parsedErrors);
+    return;
+  }
+
+ 
+
+  if (setFormErrors) {
+    const validationErrors = responseData as ApiValidationErrors;
 
     for (const key in validationErrors) {
+      const lowerKey = key.toLowerCase();
       if (validationErrors[key]?.length) {
-        parsedErrors[key] = validationErrors[key]![0]; // yalnız ilk mesaj
+        parsedErrors[lowerKey] = validationErrors[key]![0];
       }
+    }
+
+    // Əgər heç bir field error yoxdursa amma ümumi `error` varsa
+    if (Object.keys(parsedErrors).length === 0 && responseData.error) {
+      parsedErrors.general = responseData.error;
     }
 
     setFormErrors(parsedErrors);

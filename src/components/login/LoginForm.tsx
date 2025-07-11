@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { ROUTE } from '../../constants'
 import { loginFunc } from '../../services/auth'
 import { AuthContext } from '../../contexts/AuthContext'
+import { toast } from 'react-toastify'
 
 interface InitialDataType {
     email: string,
@@ -24,7 +25,7 @@ const LoginForm = () => {
     const navigate = useNavigate()
 
     if (!authContext) {
-      throw new Error("AuthContext Provider is missing")
+        throw new Error("AuthContext Provider is missing")
     }
 
     const { login } = authContext
@@ -39,13 +40,15 @@ const LoginForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        if (formErrors.general) {
+            toast.error(formErrors.general)
+        }
         const response = await loginFunc(formData, setFormErrors)
-    
-        console.log(response,"response");
-        
+
         login(response)
         setFormData(initialData)
     }
+
 
     return (
         <form className={styles.form} >

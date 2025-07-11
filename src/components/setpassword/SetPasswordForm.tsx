@@ -14,7 +14,7 @@ const initialData: IResedPassword = {
   confirmNewPassword: "",
 }
 const SetPasswordForm = () => {
-     const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
+  const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
   const [formData, setFormData] = useState<IResedPassword>(initialData)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -26,14 +26,13 @@ const SetPasswordForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await resetPassword(formData,setFormErrors)
-      toast.success("ugurla yenilendi")
+      await resetPassword(formData, setFormErrors)
+      setFormData(initialData)
     } catch (error) {
       console.log(error);
-      toast.error("xeta oldu!")
     }
 
-    
+
   }
 
   useEffect(() => {

@@ -1,3 +1,4 @@
+/* Reset */
 * {
   padding: 0;
   margin: 0;
@@ -5,12 +6,13 @@
   text-decoration: none;
   list-style: none;
 }
-@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap");
 
+/* Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 :root {
-  /* colors */
+  /* Colors */
   --color-primary: #515def;
   --color-primary-hover: #3f49d1;
   --color-secondary: #ff8682;
@@ -20,24 +22,53 @@
   --color-white: #ffffff;
   --color-black: #1c1b1f;
   --color-white2: #f3f3f3;
-  /*fonts*/
+
+  /* Fonts */
   --red-hat: "Red Hat Display", sans-serif;
   --popins: "Poppins", sans-serif;
-  /*font size*/
-  --fs-base: 1rem;
-  --fs-600: calc(var(--fs-base) + 4px); /* 40px */
+
+  /* Font sizes */
+  --fs-base: 1rem; /* 16px (default) */
+  --fs-150: calc(var(--fs-base) + 20px); /* 36px */
+  --fs-100: calc(var(--fs-base) + 12px); /* 28px */
   --fs-200: var(--fs-base); /* 16px */
-  --fs-100: calc(var(--fs-base) - 2px); /* 14px */
-  --space-600: calc(var(--fs-base) + 10px);
+  --fs-100-smaller: calc(var(--fs-base) - 2px); /* 14px */
+
+  /* Spacing */
+  --space-600: calc(var(--fs-base) + 10px); /* 26px */
+  --margin: calc(var(--fs-base) + 4px); /* 20px */
 
   /* Aliases */
-  --title-size: var(--fs-600);
+  --title-size: var(--fs-150);
   --text-size: var(--fs-200);
-  --label-size: var(--fs-100);
-  --margin: var(--fs-600);
-  /* Spacing */
+  --label-size: var(--fs-100-smaller);
+  --margin-size: var(--margin);
+
+  /* Other */
   --input-gap: var(--space-600);
+
+  /* border-radius*/
+  --r-base: 1rem;
+  --r-50: calc(var(--r-base) - 12px);
+  --r-100: calc(var(--r-base) + 16px);
+
+  /*padding*/
+  --p-base: 1rem;
+  --p-25: calc(var(--p-base) - 8px);
+  --p-50: calc(var(--p-base) + 4px);
+  --p-100: calc(var(--p-base) + 46px);
+  --p-150: calc(var(--p-base) + 88px);
+  /*margin*/
+  --m-base: 1rem;
+  --m-50: calc(var(--m-base));
+  --m-100: calc(var(--m-base) + 16px);
+  --m-150: calc(var(--m-base) + 32px);
+  /*gap*/
+  --g-base: 1rem;
+  --gap-25: calc(var(--g-base) - 12px);
+  --g-50: calc(var(--g-base) - 8px);
 }
+
 .container {
   padding-left: 104px;
   padding-right: 104px;
