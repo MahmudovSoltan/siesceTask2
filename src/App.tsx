@@ -1,5 +1,5 @@
 import { ToastContainer } from "react-toastify"
-import MainRoutes from "./routes/MainRoutes"
+import MainRoutes from "./routes/routes"
 import { AuthProvider } from "./contexts/AuthProvider"
 
 

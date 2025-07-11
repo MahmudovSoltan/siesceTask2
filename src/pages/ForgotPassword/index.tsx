@@ -8,7 +8,7 @@ const ForgetPassword = () => {
             <div className={styles.password_top}>
                 <Logo />
             </div>
-            <div className={` container ${styles.password_content}`}>
+            <div className={`container ${styles.password_content}`}>
                 <ForgetPasswordLeft />
                 <ForgetPasswordRight />
             </div>

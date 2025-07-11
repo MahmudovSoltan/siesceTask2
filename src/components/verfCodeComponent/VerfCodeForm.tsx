@@ -45,8 +45,8 @@ const VerfCodeForm = () => {
     e.preventDefault();
     try {
       const response = await vefCodeFUnc(formData, setFormErrors)
-      console.log(response);
       navigate(ROUTE.SETPASSWOD)
+      console.log(response);
     } catch (error) {
       console.log(error);
     }

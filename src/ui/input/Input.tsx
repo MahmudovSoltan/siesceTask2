@@ -39,7 +39,6 @@ const TextInput: React.FC<TextInputProps> = ({
                     <div className={styles.errorAbsolute}>{error[inputName]?.slice(0,44)}</div>
                 )}
             </div>
-
         </>
     );
 };

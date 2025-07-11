@@ -8,7 +8,7 @@ const SetPassword = () => {
       <div className={styles.setpassword_top}>
         <Logo />
       </div>
-      <div className={` container ${styles.setpassword_content}`}>
+      <div className={`container ${styles.setpassword_content}`}>
         <SetPasswordLeft />
         <SetPasswordRight />
       </div>

@@ -83,7 +83,7 @@ export const vefCodeFUnc = async (data: IVerfCode, setFormErrors: (val: ParsedFo
                 },
             }
         );
-        toast.success("Parol dəyişdirildi");
+        toast.success("Kod göndərildi");
         return response.data;
     } catch (error) {
         handleApiError(error, setFormErrors);
