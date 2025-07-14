@@ -21,14 +21,14 @@ const initialData: InitialDataType = {
 const LoginForm = () => {
     const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
     const [formData, setFormData] = useState<InitialDataType>(initialData)
-    const authContext = useContext(AuthContext)
     const navigate = useNavigate()
+    const authContext = useContext(AuthContext)
 
     if (!authContext) {
         throw new Error("AuthContext Provider is missing")
     }
 
-    const { login } = authContext
+    const { login, loading, setLoading } = authContext
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -43,10 +43,19 @@ const LoginForm = () => {
         if (formErrors.general) {
             toast.error(formErrors.general)
         }
-        const response = await loginFunc(formData, setFormErrors)
+        try {
+            setLoading(true)
+            const response = await loginFunc(formData, setFormErrors)
+            login(response)
+            setLoading(false)
+            setFormData(initialData)
+            navigate(ROUTE.USERS)
 
-        login(response)
-        setFormData(initialData)
+        } catch (error) {
+            console.log(error);
+            setLoading(false)
+        }
+
     }
 
 
@@ -84,7 +93,7 @@ const LoginForm = () => {
             </div>
 
             <div className={styles.form_btn}>
-                <BUtton titile='Login' onclick={handleSubmit} />
+                <BUtton loading={loading} titile='Login' onclick={handleSubmit} />
             </div>
 
             <div className={styles.form_bottom_text}>

@@ -1,13 +1,16 @@
 import { ToastContainer } from "react-toastify"
 import MainRoutes from "./routes/routes"
 import { AuthProvider } from "./contexts/AuthProvider"
+import { UserProvider } from "./contexts/UserProvider"
 
 
 const App = () => {
   return (
     <AuthProvider>
-      <MainRoutes />
-      <ToastContainer />
+      <UserProvider>
+        <MainRoutes />
+        <ToastContainer />
+      </UserProvider>
     </AuthProvider>
   )
 }

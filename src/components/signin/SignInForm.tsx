@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import TextInput from '../../ui/input/Input'
 import PasswordInput from '../../ui/input/Input-Icon'
 import styles from './css/signincomp.module.css'
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { ROUTE } from '../../constants'
 import { registerFunc } from '../../services/auth'
 import { toast } from 'react-toastify'
+import { AuthContext } from '../../contexts/AuthContext'
 interface InitialDataType {
     email: string,
     password: string,
@@ -27,6 +28,13 @@ const SignInForm = () => {
     const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
     const [formData, setFormData] = useState<InitialDataType>(initialData)
     const navigate = useNavigate()
+    const context = useContext(AuthContext);
+
+    if (!context) {
+        throw new Error("AuthContext must be used within AuthProvider");
+    }
+
+    const {loading, setLoading } = context;
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setFormData({
@@ -35,12 +43,13 @@ const SignInForm = () => {
         })
     }
 
-  console.log(formErrors,'FormError');
-  
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            setLoading(true)
             await registerFunc(formData, setFormErrors);
+            setLoading(false)
             navigate(ROUTE.LOGIN);
             setFormData(initialData)
         } catch (error) {
@@ -115,7 +124,7 @@ const SignInForm = () => {
             </div>
 
             <div className={styles.form_btn}>
-                <BUtton onclick={handleSubmit} titile='Create account' />
+                <BUtton loading={loading} onclick={handleSubmit} titile='Create account' />
             </div>
 
             <div className={styles.form_bottom_text}>

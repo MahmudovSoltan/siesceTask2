@@ -1,25 +1,16 @@
 // src/api/auth.js
-import axios from "axios";
 import type { ILogin, IRegister, IResedPassword, ISenEmail, IVerfCode, ParsedFormErrors } from "../types/auth.type";
 import { toast } from "react-toastify";
 import { handleApiError } from "../utils/handleApiError";
+import axiosInstance from "./axiosInstance";
 
 
-
-const API = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
-});
 export const loginFunc = async (data: ILogin, setFormErrors?: (val: ParsedFormErrors) => void) => {
 
     try {
-        const response = await API.post(
+        const response = await axiosInstance.post(
             "/api/Auth/Login",
             data,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
         );
         toast.success("Daxil olundu!");
         return response.data;
@@ -32,14 +23,9 @@ export const loginFunc = async (data: ILogin, setFormErrors?: (val: ParsedFormEr
 
 export const registerFunc = async (data: IRegister, setFormErrors: (val: ParsedFormErrors) => void) => {
     try {
-        const response = await API.post(
+        const response = await axiosInstance.post(
             "/api/Auth/Register",
             data,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
         );
         toast.success("Qeydiyyat uğurludur!");
         return response.data;
@@ -52,14 +38,9 @@ export const registerFunc = async (data: IRegister, setFormErrors: (val: ParsedF
 
 export const sendEmilFunc = async (data: ISenEmail, setFormErrors: (val: ParsedFormErrors) => void) => {
     try {
-        const response = await API.post(
+        const response = await axiosInstance.post(
             "/api/Auth/SendOtpCode",
             data,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
         );
         toast.success("Email gonderildi");
         return response.data;
@@ -74,14 +55,9 @@ export const sendEmilFunc = async (data: ISenEmail, setFormErrors: (val: ParsedF
 
 export const vefCodeFUnc = async (data: IVerfCode, setFormErrors: (val: ParsedFormErrors) => void) => {
     try {
-        const response = await API.post(
+        const response = await axiosInstance.post(
             "/api/Auth/VerifyOtpCode",
             data,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
         );
         toast.success("Kod göndərildi");
         return response.data;
@@ -95,14 +71,9 @@ export const vefCodeFUnc = async (data: IVerfCode, setFormErrors: (val: ParsedFo
 }
 export const resetPassword = async (data: IResedPassword,setFormErrors:(val: ParsedFormErrors) => void) => {
     try {
-        const response = await API.post(
+        const response = await axiosInstance.post(
             "/api/Auth/ResetPassword",
             data,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
         );
         toast.success("Parol dəyişdirildi");
         return response.data;

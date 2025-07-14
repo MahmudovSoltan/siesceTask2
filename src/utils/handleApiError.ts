@@ -11,11 +11,10 @@ export const handleApiError = (
     return;
   }
 
-  console.log(error, 'funcError');
+ 
 
   const parsedErrors: ParsedFormErrors = {};
 
-  // 1. Əgər 409 statuslu ümumi error varsa (məsələn: "User artıq mövcuddur")
   if (responseData.statusCode === 409 || responseData.statusCode === 401 && typeof responseData.error === "string") {
     parsedErrors.general = responseData.error;
     if (setFormErrors) setFormErrors(parsedErrors);
