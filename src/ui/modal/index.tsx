@@ -13,7 +13,9 @@ interface PropsType {
         lastName: string;
         email: string;
         phoneNumber: string;
+
     };
+    formErrors: any
 }
 
 const CustomModal = ({ open, loading, closeBtn, onSubmit, initialValues, formErrors }: PropsType) => {
