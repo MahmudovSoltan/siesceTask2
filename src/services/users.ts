@@ -30,7 +30,7 @@ export const getAllUsers = async (
   }
 };
 export const editUser = async (
-  data: IUserInfo,setFormErrors?: (val: ParsedFormErrors) => void
+  data: IUserInfo, setFormErrors?: (val: ParsedFormErrors) => void
 ): Promise<IUserInfo> => {
   try {
     const response = await axiosInstance.put("/api/Users", data);
@@ -59,6 +59,16 @@ export const deleteUser = async (id: string) => {
     return response.data
   } catch (error) {
     toast.error("Xəta baş verdi ")
+    console.log(error);
+
+  }
+}
+
+export const userInfo = async () => {
+  try {
+    const response = await axiosInstance.get(`/api/Auth/Info`)
+    return response.data
+  } catch (error) {
     console.log(error);
 
   }
