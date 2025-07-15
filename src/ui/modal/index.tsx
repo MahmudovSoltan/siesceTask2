@@ -8,7 +8,7 @@ interface PropsType {
     closeBtn: () => void;
     onSubmit: (values: IUserInfo) => void;
     initialValues: {
-        id?:string,
+        id?: string,
         firstName: string;
         lastName: string;
         email: string;
@@ -16,10 +16,10 @@ interface PropsType {
     };
 }
 
-const CustomModal = ({ open, loading, closeBtn, onSubmit, initialValues }: PropsType) => {
+const CustomModal = ({ open, loading, closeBtn, onSubmit, initialValues, formErrors }: PropsType) => {
     const [form] = Form.useForm();
-    console.log(loading);
-    
+
+
     useEffect(() => {
         if (open) {
             form.setFieldsValue(initialValues);
@@ -27,7 +27,7 @@ const CustomModal = ({ open, loading, closeBtn, onSubmit, initialValues }: Props
     }, [open, initialValues, form]);
 
     const handleFinish = (values: IUserInfo) => {
-        onSubmit({...values,id:initialValues.id});
+        onSubmit({ ...values, id: initialValues.id });
     };
 
     return (
@@ -38,7 +38,7 @@ const CustomModal = ({ open, loading, closeBtn, onSubmit, initialValues }: Props
             onOk={() => form.submit()}
             confirmLoading={loading}
             footer={
-                <div style={{ display: "flex", justifyContent: "space-between",gap:"20px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "20px" }}>
                     <Button onClick={closeBtn} style={{ width: "100%" }}>Ləğv et</Button>
                     <Button
                         type="primary"
@@ -65,11 +65,17 @@ const CustomModal = ({ open, loading, closeBtn, onSubmit, initialValues }: Props
                 <Form.Item label="Email" name="email" rules={[{ required: true, type: "email", message: "Düzgün email daxil edin" }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item label="Telefon nömrəsi" name="phoneNumber" rules={[{ required: true, message: "Telefon nömrəsi daxil edin" }]}>
+                <Form.Item
+                    label="Telefon nömrəsi"
+                    name="phoneNumber"
+                    rules={[{ required: true, message: "Telefon nömrəsi daxil edin" }]}
+                    validateStatus={formErrors?.["phonenumber"] ? "error" : ""}
+                    help={formErrors?.["phonenumber"]}
+                >
                     <Input />
                 </Form.Item>
             </Form>
-        </Modal>
+        </Modal >
     );
 };
 

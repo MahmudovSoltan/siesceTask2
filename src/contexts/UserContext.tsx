@@ -14,6 +14,9 @@ interface IUserContextType {
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
   modalLoading: boolean;
   setModalLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setDelteModal: React.Dispatch<React.SetStateAction<boolean>>;
+  deleteModal:boolean
+
 }
 
 export const UserContext = createContext<IUserContextType | undefined>(undefined);

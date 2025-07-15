@@ -7,9 +7,12 @@ import { getAllUsers, userDetail } from "../../services/users";
 import { ROUTE } from "../../constants";
 import type { IUserType } from "../../types/uset.type";
 import styles from './css/users.module.css'
-const PageSize = 5;
-
-const UserTable = () => {
+import Pagination from "../../ui/pagination/Pagination";
+const PageSize = 10;
+interface PropsType{
+  users:IUserType[]
+}
+const UserTable = ({users}:PropsType) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
 
@@ -20,13 +23,14 @@ const UserTable = () => {
   }
 
   const {
-    users,
+ 
     loading,
     setUsers,
     setLoading,
     setIsModal,
     setUserInfo,
     setModalLoading,
+    setDelteModal
   } = context;
 
   const [total, setTotal] = useState<number>(0);
@@ -67,9 +71,10 @@ const UserTable = () => {
     });
   };
 
-  const handleDelete = (id: string) => {
-    console.log(id);
-
+  const handleDelete = async (id: string) => {
+    setDelteModal(true)
+    const response = await userDetail(id);
+    setUserInfo(response);
   };
 
   const handleEdit = async (id: string) => {
@@ -123,15 +128,16 @@ const UserTable = () => {
 
         return (
           <Dropdown menu={{ items }} trigger={["click"]}>
-            <span style={{ cursor: "pointer", fontSize: 20 }}>...</span>
+            <span style={{ cursor: "pointer", fontSize: 20 ,paddingLeft:"20px"}}>...</span>
           </Dropdown>
         );
       },
     },
   ];
+  const onPageChange = (newPage: number) => setSearchParams({ SearchPhrase, PageNumber: newPage.toString() })
 
   return (
-    <div  className={styles.user_table}>
+    <div className={styles.user_table}>
       <Input.Search
         placeholder="İstifadəçi axtar..."
         value={SearchPhrase}
@@ -145,13 +151,19 @@ const UserTable = () => {
         dataSource={users}
         loading={loading}
         rowKey="id"
-        pagination={{
-          current: PageNumber,
-          pageSize: PageSize,
-          total: total,
-        }}
+        pagination={false}
         onChange={handleTableChange}
       />
+
+      <Pagination
+        currentPage={PageNumber}
+        totalCount={total}
+        pageSize={PageSize}
+        searchPhrase={SearchPhrase}
+        onPageChange={onPageChange}
+      />
+
+
     </div>
   );
 };

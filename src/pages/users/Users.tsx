@@ -1,23 +1,27 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import UsersBody from "../../components/users/UsersBody"
 import CustumeModal from "../../ui/modal"
 import { UserContext } from "../../contexts/UserContext";
-import { editUser, getAllUsers } from "../../services/users";
+import { deleteUser, editUser, getAllUsers } from "../../services/users";
 import type { IUserInfo } from "../../types/uset.type";
+import Header from "../../components/header/Header";
+import DeletModal from "../../ui/modal/DeleteModal";
+
 
 const Users = () => {
+      const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
     const userContext = useContext(UserContext)
     if (!userContext) {
         throw new Error("AuthContext Provider is missing")
     }
 
-    const { modalLoading, isModal, setIsModal, userInfo, setModalLoading,setUsers  } = userContext;
+    const { modalLoading, isModal, setIsModal, userInfo, setModalLoading, setUsers, deleteModal, setDelteModal, users } = userContext;
 
     const editUserFunc = async (data: IUserInfo) => {
 
         try {
             setModalLoading(true)
-            await editUser(data)
+            await editUser(data,setFormErrors)
             const respone = await getAllUsers();
             setUsers(respone.users)
             setModalLoading(false)
@@ -29,15 +33,30 @@ const Users = () => {
         }
 
     }
-    console.log(userInfo, "CustomModal");
-
+    const deleteUserFunc = async () => {
+        setModalLoading(true)
+        if (userInfo?.id) {
+            await deleteUser(userInfo?.id)
+        }
+        setModalLoading(false)
+        const respone = await getAllUsers();
+        setUsers(respone.users)
+        setDelteModal(false)
+    }
+       console.log(formErrors);
+       
     return (
         <div>
-            <UsersBody   />
+            <Header titile="Users" username="Soltan Mahmudov" />
+            <UsersBody users={users} />
             {
                 userInfo &&
-                <CustumeModal onSubmit={editUserFunc} initialValues={userInfo} loading={modalLoading} open={isModal} closeBtn={() => setIsModal(false)} />
+                <CustumeModal formErrors={formErrors} onSubmit={editUserFunc} initialValues={userInfo} loading={modalLoading} open={isModal} closeBtn={() => setIsModal(false)} />
             }
+
+
+            <DeletModal deleteUser={deleteUserFunc} open={deleteModal} closeBtn={() => setDelteModal(false)} loading={modalLoading} />
+
         </div>
     )
 }

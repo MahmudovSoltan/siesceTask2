@@ -2,12 +2,14 @@
 import { toast } from "react-toastify";
 import axiosInstance from "./axiosInstance";
 import type { IUserInfo, IUserType } from "../types/uset.type";
+import { handleApiError } from "../utils/handleApiError";
+import type { ParsedFormErrors } from "../types/auth.type";
 
 
 interface IParamsType {
-  SearchPhrase?:string,
-  PageSize?:number,
-  PageNumber?:number
+  SearchPhrase?: string,
+  PageSize?: number,
+  PageNumber?: number
 }
 interface UserListResponse {
   users: IUserType[];
@@ -28,7 +30,7 @@ export const getAllUsers = async (
   }
 };
 export const editUser = async (
-  data:IUserInfo
+  data: IUserInfo,setFormErrors?: (val: ParsedFormErrors) => void
 ): Promise<IUserInfo> => {
   try {
     const response = await axiosInstance.put("/api/Users", data);
@@ -36,11 +38,12 @@ export const editUser = async (
     return response.data;
   } catch (error) {
     console.error("User-lər alınarkən xəta baş verdi:", error);
-    throw error; 
+    handleApiError(error, setFormErrors);
+    throw error;
 
   }
 };
-export const userDetail = async (id:string) => {
+export const userDetail = async (id: string) => {
   try {
     const response = await axiosInstance.get(`/api/Users/${id}`)
     return response.data
@@ -49,7 +52,7 @@ export const userDetail = async (id:string) => {
 
   }
 }
-export const deleteUser = async (id:string) => {
+export const deleteUser = async (id: string) => {
   try {
     const response = await axiosInstance.delete(`/api/Users/${id}`)
     toast.success("İstifadəçi silindi")

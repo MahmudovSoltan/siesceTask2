@@ -9,7 +9,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [isModal, setIsModal] = useState<boolean>(false)
-     const [modalLoading,setModalLoading]= useState<boolean>(false)
+    const [modalLoading, setModalLoading] = useState<boolean>(false)
+    const [deleteModal,setDelteModal]= useState<boolean>(false)
 
     const initialValue = {
         users,
@@ -21,7 +22,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setIsModal,
         isModal,
         setModalLoading,
-        modalLoading
+        modalLoading,
+        deleteModal,
+        setDelteModal
     };
 
     return (
