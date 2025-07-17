@@ -21,12 +21,17 @@ interface UserListResponse {
 export const getAllUsers = async (
   params: IParamsType = {}
 ): Promise<UserListResponse> => {
+
+  const cleanParams = { ...params };
+  if (!cleanParams.SearchPhrase?.trim()) {
+    delete cleanParams.SearchPhrase;
+  }
   try {
     const response = await httpRequest<UserListResponse>(
       API_CONTROLLER.user(),
       {
         method: "GET",
-        queryParams: params,
+        queryParams: cleanParams,
       }
     );
     return response ?? { users: [], totalCount: 0 };

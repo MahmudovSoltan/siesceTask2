@@ -9,10 +9,10 @@ import type { IUserType } from "../../types/uset.type";
 import styles from './css/users.module.css'
 import Pagination from "../../ui/pagination/Pagination";
 const PageSize = 6;
-interface PropsType{
-  users:IUserType[]
+interface PropsType {
+  users: IUserType[]
 }
-const UserTable = ({users}:PropsType) => {
+const UserTable = ({ users }: PropsType) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
 
@@ -23,7 +23,7 @@ const UserTable = ({users}:PropsType) => {
   }
 
   const {
- 
+
     loading,
     setUsers,
     setLoading,
@@ -43,9 +43,8 @@ const UserTable = ({users}:PropsType) => {
     const fetchUsers = async () => {
       setLoading(true);
       const response = await getAllUsers({ SearchPhrase, PageNumber, PageSize });
-
       if (response) {
-        setUsers(response.users); 
+        setUsers(response.users);
         setTotal(response.totalCount);
       }
 
@@ -57,9 +56,13 @@ const UserTable = ({users}:PropsType) => {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setSearchParams({ SearchPhrase: value, PageNumber: "1" });
+    const newParams: Record<string, string> = {};
+    if (value.trim()) {
+      newParams.SearchPhrase = value.trim();
+    }
+    // newParams.PageNumber = "1";
+    setSearchParams(newParams);
   };
-
   const handleTableChange = (
     pagination: TablePaginationConfig,
   ) => {
@@ -75,7 +78,7 @@ const UserTable = ({users}:PropsType) => {
     setDelteModal(true)
     const response = await userDetail(id);
     if (response) {
-      setUserInfo(response);   
+      setUserInfo(response);
     }
   };
 
@@ -86,7 +89,7 @@ const UserTable = ({users}:PropsType) => {
       setModalLoading(false);
       if (response) {
         setUserInfo(response);
-        
+
       }
       setIsModal(true);
     } catch (error) {
@@ -133,13 +136,13 @@ const UserTable = ({users}:PropsType) => {
 
         return (
           <Dropdown menu={{ items }} trigger={["click"]}>
-            <span style={{ cursor: "pointer", fontSize: 20 ,paddingLeft:"20px"}}>...</span>
+            <span style={{ cursor: "pointer", fontSize: 20, paddingLeft: "20px" }}>...</span>
           </Dropdown>
         );
       },
     },
   ];
-  const onPageChange = (newPage: number) => setSearchParams({ SearchPhrase, PageNumber: newPage.toString() })
+  const onPageChange = (newPage: number) => setSearchParams({ PageNumber: newPage.toString() })
 
   return (
     <div className={styles.user_table}>
