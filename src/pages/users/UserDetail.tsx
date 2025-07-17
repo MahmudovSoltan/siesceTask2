@@ -21,7 +21,9 @@ const UserDetailPage = () => {
       setLoading(true)
       if (id) {
         const response = await userDetail(id);
-        setUserInfo(response);
+        if (response) {
+          setUserInfo(response);    
+        }
         setLoading(false)
       }
     };

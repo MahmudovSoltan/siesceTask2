@@ -45,8 +45,10 @@ const LoginForm = () => {
         }
         try {
             setLoading(true)
-            const response = await loginFunc(formData, setFormErrors)
-            login(response)
+            const response  = await loginFunc(formData, setFormErrors)
+            if (response) {
+                login(response)     
+            }
             setLoading(false)
             setFormData(initialData)
             navigate(ROUTE.USERS)

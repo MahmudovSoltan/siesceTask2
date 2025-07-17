@@ -13,6 +13,7 @@ interface IRole {
 export interface IUserInfo {
     id?:string,
     firstName:string,
+    fullname?:string |undefined,
     lastName:string,
     email:string,
     emailConfirmed?:boolean,

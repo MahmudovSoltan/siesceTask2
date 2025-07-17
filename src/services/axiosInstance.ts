@@ -1,8 +1,9 @@
-// utils/axiosInstance.ts
-import axios from "axios";
-import { deleteCookie, getCookie, setCookie } from "../utils/cookie";
 
-const baseURL = import.meta.env.VITE_API_BASE_URL;
+import axios from "axios";
+import { getCookie, setCookie, deleteCookie } from "../utils/cookie";
+import API_CONTROLLER from "./api.config";
+
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 const axiosInstance = axios.create({
     baseURL,
@@ -25,33 +26,23 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
-        const originalRequest = error.config as any;
-
+        const originalRequest = error.config;
         const refresh = getCookie("refresh_token");
-
-        if (
-            error.response?.status === 401 &&
-            !originalRequest._retry &&
-            refresh
-        ) {
+        if (error.response?.status === 401 && !originalRequest._retry && refresh) {
             originalRequest._retry = true;
-
             try {
-                const refreshRes = await axios.post(`${baseURL}/api/Auth/Refresh`, {
+                const res = await axios.post(API_CONTROLLER.auth("/Refresh"), {
                     refreshToken: refresh,
                 });
-
-                const { accessToken, refreshToken } = refreshRes.data;
-
-                setCookie("refresh_token", refreshToken);
+                const { accessToken, refreshToken } = res.data;
                 setCookie("accessToken", accessToken);
-
+                setCookie("refresh_token", refreshToken);
                 originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
                 return axiosInstance(originalRequest);
-            } catch (refreshError) {
-                deleteCookie("refresh_token");
+            } catch (err) {
                 deleteCookie("accessToken");
-                return Promise.reject(refreshError);
+                deleteCookie("refresh_token");
+                return Promise.reject(err);
             }
         }
 

@@ -8,7 +8,7 @@ import { ROUTE } from "../../constants";
 import type { IUserType } from "../../types/uset.type";
 import styles from './css/users.module.css'
 import Pagination from "../../ui/pagination/Pagination";
-const PageSize = 10;
+const PageSize = 6;
 interface PropsType{
   users:IUserType[]
 }
@@ -45,7 +45,7 @@ const UserTable = ({users}:PropsType) => {
       const response = await getAllUsers({ SearchPhrase, PageNumber, PageSize });
 
       if (response) {
-        setUsers(response.users); // response.users: IUserType[]
+        setUsers(response.users); 
         setTotal(response.totalCount);
       }
 
@@ -74,7 +74,9 @@ const UserTable = ({users}:PropsType) => {
   const handleDelete = async (id: string) => {
     setDelteModal(true)
     const response = await userDetail(id);
-    setUserInfo(response);
+    if (response) {
+      setUserInfo(response);   
+    }
   };
 
   const handleEdit = async (id: string) => {
@@ -82,7 +84,10 @@ const UserTable = ({users}:PropsType) => {
       setModalLoading(true);
       const response = await userDetail(id);
       setModalLoading(false);
-      setUserInfo(response);
+      if (response) {
+        setUserInfo(response);
+        
+      }
       setIsModal(true);
     } catch (error) {
       console.log(error);

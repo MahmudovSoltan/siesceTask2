@@ -54,11 +54,12 @@ const Users = () => {
         setUsers(respone.users)
         setDelteModal(false)
     }
-    console.log(formErrors);
    const closeBtn=()=>{
         setFormErrors({})
         setIsModal(false)
    }
+
+   
     return (
         <div>
             <Header titile="Users" />
