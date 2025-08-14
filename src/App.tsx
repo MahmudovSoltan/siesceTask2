@@ -10,7 +10,7 @@ const queryClient = new QueryClient();
 const App: React.FC = () => {
   // Bütün dəyişənlər camelCase formatında
   const userName = "soltan"; // ✅ Düzgün format
-  
+  const name = "sss"
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
