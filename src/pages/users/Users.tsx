@@ -7,70 +7,100 @@ import type { IUserInfo } from "../../types/uset.type";
 import Header from "../../components/header/Header";
 import DeletModal from "../../ui/modal/DeleteModal";
 import { useSearchParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Spin } from "antd";
 
 
 const Users = () => {
     const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
-
     const [searchParams] = useSearchParams();
     const SearchPhrase = searchParams.get("SearchPhrase") || "";
     const PageNumber = parseInt(searchParams.get("PageNumber") || "1", 10);
-    const PageSize = 10;
+
+    const PageSize = 6;
     const userContext = useContext(UserContext)
     if (!userContext) {
         throw new Error("AuthContext Provider is missing")
     }
 
-    const { modalLoading, isModal, setIsModal, userInfo, setModalLoading, setUsers, deleteModal, setDelteModal, users } = userContext;
+    const { modalLoading, isModal, setIsModal, userInfo, setModalLoading, deleteModal, setDelteModal } = userContext;
+    const queryClient = useQueryClient();
+    const { data, isLoading } = useQuery({
+        queryKey: ['users', SearchPhrase, PageNumber, PageSize],
+        queryFn: () => getAllUsers({ SearchPhrase, PageNumber, PageSize }),
+    });
 
-    const editUserFunc = async (data: IUserInfo) => {
-        try {
-            setModalLoading(true);
-            await editUser(data, setFormErrors);
 
-            const response = await getAllUsers({
-                SearchPhrase,
-                PageNumber,
-                PageSize
-            });
-
-            setUsers(response.users);
+    const editUserMutation = useMutation({
+        mutationFn: (data: IUserInfo) => editUser(data, setFormErrors),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['users'] });
             setModalLoading(false);
             setIsModal(false);
-            setFormErrors({})
-        } catch (error) {
+            setFormErrors({});
+        },
+        onError: () => {
             setModalLoading(false);
-            console.log(error);
         }
-    };
+    });
 
-    const deleteUserFunc = async () => {
-        setModalLoading(true)
-        if (userInfo?.id) {
-            await deleteUser(userInfo?.id)
+    const deleteUserMutation = useMutation({
+        mutationFn: (id: string) => deleteUser(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['users'] });
+            setModalLoading(false);
+            setDelteModal(false);
+        },
+        onError: () => {
+            setModalLoading(false);
         }
-        setModalLoading(false)
-        const respone = await getAllUsers();
-        setUsers(respone.users)
-        setDelteModal(false)
+    });
+
+
+
+    const editUserFunc = (data: IUserInfo) => {
+        setModalLoading(true);
+        editUserMutation.mutate(data);
     }
-   const closeBtn=()=>{
+
+    const deleteUserFunc = () => {
+        if (!userInfo?.id) return;
+        setModalLoading(true);
+        deleteUserMutation.mutate(userInfo.id);
+    }
+    const closeBtn = () => {
         setFormErrors({})
         setIsModal(false)
-   }
+    };
 
-   
+
+
+
+
     return (
         <div>
             <Header titile="Users" />
-            <UsersBody users={users} />
             {
-                userInfo &&
-                <CustumeModal formErrors={formErrors} onSubmit={editUserFunc} initialValues={userInfo} loading={modalLoading} open={isModal} closeBtn={closeBtn } />
+                data?.users && <UsersBody users={data?.users} isPending={isLoading} />
             }
 
-
-            <DeletModal deleteUser={deleteUserFunc} open={deleteModal} closeBtn={() => setDelteModal(false)} loading={modalLoading} />
+            {
+                userInfo &&
+                <CustumeModal
+                    formErrors={formErrors}
+                    onSubmit={editUserFunc}
+                    initialValues={userInfo}
+                    loading={modalLoading}
+                    open={isModal}
+                    closeBtn={closeBtn}
+                />
+            }
+            <DeletModal
+                deleteUser={deleteUserFunc}
+                open={deleteModal}
+                closeBtn={() => setDelteModal(false)}
+                loading={modalLoading}
+            />
 
         </div>
     )

@@ -8,7 +8,7 @@ interface PropsType {
 }
 const BUtton = ({ onclick, titile, loading }: PropsType) => {
     return (
-        <button disabled={loading} className={styles.button} onClick={onclick}>
+        <button type='submit' disabled={loading} className={styles.button} onClick={onclick}>
             {
                 loading ? <Spin indicator={<LoadingOutlined spin />} size="large" /> : titile
             }

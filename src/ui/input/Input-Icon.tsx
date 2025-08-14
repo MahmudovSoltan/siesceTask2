@@ -32,8 +32,9 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
                     onChange={onChange}
                     placeholder=" "
                     className={`${styles.inputField} ${error?.[inputName] ? styles.inputError : ""}`}
+                    id={name}
                 />
-                <label className={styles.floatingLabel}>{label}</label>
+                <label htmlFor={name} className={styles.floatingLabel}>{label}</label>
                 <button
                     type="button"
                     className={styles.eyeButton}
@@ -46,7 +47,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
                     }
                 </button>
                 {error?.[inputName] && (
-                    <div className={styles.errorAbsolute}>{error[inputName]?.slice(0, 45)}</div>
+                <div className={styles.errorAbsolute} data-testid="form-password-error">{error[inputName]?.slice(0, 45)}{inputName}</div>
                 )}
             </div>
         </>

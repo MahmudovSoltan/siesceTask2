@@ -23,6 +23,8 @@ const TextInput: React.FC<TextInputProps> = ({
     error
 }) => {
     const inputName = name.toLowerCase()
+
+    
     return (
         <>
             <div className={styles.inputWrapper} style={{ width: witdh }}>
@@ -30,13 +32,16 @@ const TextInput: React.FC<TextInputProps> = ({
                     type={type}
                     name={name}
                     value={value}
+                    data-testid="form-input"
                     onChange={onChange}
                     placeholder={placeholder}
                     className={`${styles.inputField} ${error?.[inputName] ? styles.inputError : ""}`}
+                    id={name}
                 />
-                <label className={styles.floatingLabel}>{label}</label>
+                <label htmlFor={name} className={styles.floatingLabel}>{label}</label>
                 {error?.[inputName] && (
-                    <div className={styles.errorAbsolute}>{error[inputName]?.slice(0,44)}</div>
+                    <div id={`form-${name}-error`} className={styles.errorAbsolute}>{error[inputName]?.slice(0,43)}
+                    </div>
                 )}
             </div>
         </>

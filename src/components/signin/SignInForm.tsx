@@ -34,7 +34,7 @@ const SignInForm = () => {
         throw new Error("AuthContext must be used within AuthProvider");
     }
 
-    const {loading, setLoading } = context;
+    const { loading, setLoading } = context;
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setFormData({
@@ -54,6 +54,7 @@ const SignInForm = () => {
             setFormData(initialData)
         } catch (error) {
             console.error(error);
+            setLoading(false)
         }
         if (formErrors.general) {
             toast.error("User artıq mövcuddur")

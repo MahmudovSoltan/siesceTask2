@@ -1,6 +1,6 @@
 import { Table, Input, Dropdown } from "antd";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getAllUsers, userDetail } from "../../services/users";
@@ -8,11 +8,13 @@ import { ROUTE } from "../../constants";
 import type { IUserType } from "../../types/uset.type";
 import styles from './css/users.module.css'
 import Pagination from "../../ui/pagination/Pagination";
+import { useMutation } from "@tanstack/react-query";
 const PageSize = 6;
 interface PropsType {
-  users: IUserType[]
+  users: IUserType[],
+  isPending:boolean
 }
-const UserTable = ({ users }: PropsType) => {
+const UserTable = ({ users, isPending }: PropsType) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
 
@@ -23,8 +25,6 @@ const UserTable = ({ users }: PropsType) => {
   }
 
   const {
-
-    loading,
     setUsers,
     setLoading,
     setIsModal,
@@ -38,7 +38,8 @@ const UserTable = ({ users }: PropsType) => {
 
   const SearchPhrase = searchParams.get("SearchPhrase") || "";
   const PageNumber = parseInt(searchParams.get("PageNumber") || "1", 10);
-
+ const [inputValue, setInputValue] = useState(SearchPhrase);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
@@ -54,15 +55,18 @@ const UserTable = ({ users }: PropsType) => {
     fetchUsers();
   }, [SearchPhrase, PageNumber]);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const newParams: Record<string, string> = {};
-    if (value.trim()) {
-      newParams.SearchPhrase = value.trim();
-    }
-    // newParams.PageNumber = "1";
-    setSearchParams(newParams);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setInputValue(val);
+
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    timeoutRef.current = setTimeout(() => {
+      setSearchParams({ SearchPhrase: val });
+    }, 500);
   };
+
   const handleTableChange = (
     pagination: TablePaginationConfig,
   ) => {
@@ -97,6 +101,10 @@ const UserTable = ({ users }: PropsType) => {
       setModalLoading(false);
     }
   };
+
+
+ 
+
 
   const handleView = (id: string) => {
     navigate(ROUTE.DETAILUSER.replace(":id", id));
@@ -143,13 +151,14 @@ const UserTable = ({ users }: PropsType) => {
     },
   ];
   const onPageChange = (newPage: number) => setSearchParams({ PageNumber: newPage.toString() })
+console.log(isPending,"isPending");
 
   return (
     <div className={styles.user_table}>
       <Input.Search
         placeholder="İstifadəçi axtar..."
-        value={SearchPhrase}
-        onChange={handleSearch}
+        value={inputValue}
+        onChange={handleSearchChange}
         style={{ marginBottom: 16, maxWidth: 300 }}
         allowClear
       />
@@ -157,7 +166,7 @@ const UserTable = ({ users }: PropsType) => {
       <Table<IUserType>
         columns={columns}
         dataSource={users}
-        loading={loading}
+        loading={isPending}
         rowKey="id"
         pagination={false}
         onChange={handleTableChange}

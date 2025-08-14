@@ -45,9 +45,9 @@ const LoginForm = () => {
         }
         try {
             setLoading(true)
-            const response  = await loginFunc(formData, setFormErrors)
+            const response = await loginFunc(formData, setFormErrors)
             if (response) {
-                login(response)     
+                login(response)
             }
             setLoading(false)
             setFormData(initialData)
